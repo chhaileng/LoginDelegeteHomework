@@ -9,12 +9,40 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet weak var loginButton: UIButton!
+    var isLogin: Bool = false
+    
+    @IBOutlet weak var welcomeLabel: UILabel!
+    
+    @IBAction func loginTap(_ sender: UIButton) {
+        if isLogin {
+            welcomeLabel.text = ""
+            isLogin = false
+            loginButton.setTitle("Login", for: .normal)
+            loginButton.backgroundColor = UIColor.blue
+        } else {
+            let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "loginStoryboard") as! LoginViewController
+            loginVC.delegate = self
+            present(loginVC, animated: true, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        welcomeLabel.text = ""
+        loginButton.backgroundColor = UIColor.blue
     }
 
 
+}
+
+extension ViewController: LoginDelegate {
+    func didLoginSuccess(username: String) {
+        welcomeLabel.text = "Welcome \(username)"
+        isLogin = true
+        loginButton.setTitle("Logout", for: .normal)
+        loginButton.backgroundColor = UIColor.red
+    }
 }
 
